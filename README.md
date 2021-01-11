@@ -8,12 +8,13 @@ ping bot atau lakukan command `b-help` (prefix dapat berganti kapan saja sesuai 
 
 b-help
 b-prefix [prefix baru]
-
 b-teswelcome
-
+b-eval [skrip]
 b-tesbye
 b-say [kalimat]
 b-sayembed [kalimat]
+b-totalmember
 ```
+#### Dapat request new command klo mau bayar sedikit lah :v
 
 ### Dokumentasi masih belum selesai, contact developer untuk informasi selengkapnya. 
