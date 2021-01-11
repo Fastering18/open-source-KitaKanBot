@@ -18,3 +18,5 @@ b-totalmember
 #### Dapat request new command klo mau bayar sedikit lah :v
 
 ### Dokumentasi masih belum selesai, contact developer untuk informasi selengkapnya. 
+<br>
+## Dilisensikan ke MIT, 2021 Fastering18
