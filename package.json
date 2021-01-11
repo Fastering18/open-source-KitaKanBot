@@ -1,0 +1,19 @@
+{
+  "name": "nama-terserah",
+  "version": "1.0.0",
+  "description": "Discord Bot",
+  "main": "./main/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./main/index.js"
+  },
+  "dependencies": {
+    "discord.js": "^12.4.1",
+    "pm2": "^4.5.1",
+    "dotenv": "^8.2.0"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "license": "MIT"
+}
