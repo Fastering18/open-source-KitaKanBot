@@ -21,6 +21,9 @@ const gaboleh = [
     ".-,",
     ",-."
 ]
+let bolehSay = true
+const helpDesc = `Prefix: **${prefix}**\n\n**Commands**\n${prefix}help\n${prefix}teswelcome\n${prefix}tesbye\n${prefix}prefix ${"`[prefix baru]`"}\n${prefix}say ${"`[Teks]`"}\n${prefix}eval ${"`[skrip]`"}\n${prefix}sayembed ${"`[Teks]`"}\n${prefix}totalmember\n${prefix}infoserver\n${prefix}atur ${"`[variabel]`"} ${"`[nilai]`"}`
+const helpDesc2 = `Prefix terkini: **${prefix}**\n\n**Commands**\n${prefix}help\n${prefix}teswelcome\n${prefix}tesbye\n${prefix}prefix ${"`[prefix baru]`"}\n${prefix}say ${"`[Teks]`"}\n${prefix}eval ${"`[skrip]`"}\n${prefix}sayembed ${"`[Teks]`"}\n${prefix}totalmember\n${prefix}infoserver\n${prefix}atur ${"`[variabel]`"} ${"`[nilai]`"}`
 
 function memberCount() {
     const guildsArray = client.guilds.cache
@@ -34,6 +37,14 @@ function memberCount() {
     };
     return "";
 };
+
+function contains(target, pattern){
+    var value = 0;
+    pattern.forEach(function(word){
+      value = value + target.includes(word);
+    });
+    return (value === 1)
+}
 
 function clean(text) {
     if (typeof (text) === "string")
@@ -65,7 +76,9 @@ client.on("message", async message => {
     const guild = message.guild;
     const pengirim = message.author;
     const mentahMSG = message.content.slice().toLowerCase()
-    if (gaboleh.includes(mentahMSG) && !OwnerId.includes(pengirim.id)) {
+    if (mentahMSG.includes("bypas") && !OwnerId.includes(pengirim.id) && message.author.bot === false) {
+        return message.channel.send("Bypass ?! <@" + pengirim.id + ">");
+    } else if (contains(mentahMSG, gaboleh) && !OwnerId.includes(pengirim.id)) {
         const emoji = "❌"
         message.react(emoji).then(r=> {
              message.channel.send("Ga jelas lu anjir <@" + pengirim.id + ">").then(msg => {
@@ -74,7 +87,7 @@ client.on("message", async message => {
              message.delete({timeout: 3000}).catch(console.error);
         })
         return;
-    } else if (mentahMSG === "y" || mentahMSG === "ya" || mentahMSG === "yes") {
+    } else if ((mentahMSG === "y" || mentahMSG === "ya" || mentahMSG === "yes") && message.author.bot === false) {
         for (var i = 0; i < menyakinkan.length; i++) {
             if (menyakinkan[i].id === pengirim.id) {
                 const data = menyakinkan[i];
@@ -98,7 +111,7 @@ client.on("message", async message => {
     } else if (message.content.slice() === `<@!${client.user.id}>` || message.content.slice() === `<@${client.user.id}>`) {
         const embed = new discord.MessageEmbed()
             .setTitle(`Lupa dengan prefix ?`)
-            .setDescription(`Prefix terkini: **${prefix}**\n\n**Commands**\n${prefix}help\n${prefix}teswelcome\n${prefix}tesbye\n${prefix}prefix ${"`[prefix baru]`"}\n${prefix}say ${"`[Teks]`"}\n${prefix}eval ${"`[skrip]`"}\n${prefix}sayembed ${"`[Teks]`"}`)
+            .setDescription(helpDesc2)
             .setTimestamp()
             .setFooter(`${guild.name}'s server`)
             .setColor('WHITE');
@@ -124,11 +137,11 @@ client.on("message", async message => {
         };
         const channel = guild.channels.cache.get(channelWelcomeId)
         if (!channel) return;
-        return message.channel.send("Berhasil test, cek disini:\n" + channel.toString());
+        return message.channel.send("__**Command Berhasil ditest, jika ingin liat cek disini**__:\n >> " + channel.toString());
     } else if (command === "help") {
         const embed = new discord.MessageEmbed()
             .setTitle(`Daftar commands, bot ${client.user.username}`)
-            .setDescription(`Prefix: **${prefix}**\n\n**Commands**\n${prefix}help\n${prefix}teswelcome\n${prefix}tesbye\n${prefix}prefix ${"`[prefix baru]`"}\n${prefix}say ${"`[Teks]`"}\n${prefix}eval ${"`[skrip]`"}\n${prefix}sayembed ${"`[Teks]`"}\n${prefix}totalmember`)
+            .setDescription(helpDesc)
             .setTimestamp()
             .setFooter(`${guild.name}'s server`)
             .setColor('WHITE');
@@ -154,8 +167,9 @@ client.on("message", async message => {
         };
         const channel = guild.channels.cache.get(channelWelcomeId)
         if (!channel) return;
-        return message.channel.send("Berhasil test, cek disini:\n" + channel.toString());
+        return message.channel.send("__**Command Berhasil ditest, jika ingin liat cek disini**__:\n >> " + channel.toString());
     } else if (command === "say" || command === "bilang" || command === "katakan") {
+        if (bolehSay === false && !OwnerId.includes(message.author.id)) return message.channel.send(`<@${pengirim.id}> Command ini tidak diperbolehkan untuk sementara!`);
         const messageToSay = args.slice(0).join(" ");
         if (!messageToSay) {
             return message.channel.send("harap menggunakan format: `" + prefix +"say [text]`");
@@ -193,6 +207,26 @@ client.on("message", async message => {
         return message.channel.send(embed)
     } else if (command === "totalmember") {
         return message.channel.send(`Terdapat ${guild.memberCount} member di server ini.`);
+    } else if (command === "infoserver") {
+        const embed = new discord.MessageEmbed()
+            .setTitle(`Info Server __**${guild.name}**__`)
+            .setThumbnail(guild.iconURL())
+            .setDescription(`Member ${guild.name} saat ini\n>>>>>>>>**[-♦︎${message.member.guild.memberCount}♦︎-]**<<<<<<<<\n\nUndang teman teman kalian\nkesini untuk meramaikan\nserver ini`)
+            .setTimestamp()
+            .setFooter(`${guild.name}'s Server`)
+            .setColor('GREEN');
+        return message.channel.send(embed);
+    } else if (command === "set" || command === "atur" || command === "setting") {
+        if (!OwnerId.includes(message.author.id)) return message.channel.send(`${"`" + command + "`"} command hanya untuk owner!`);
+        const variableName = args[0];
+        const valueName = args[1];
+        if (!variableName || !valueName) return message.channel.send("Harap menggunakan format: " + prefix + "set `[opsi]` `[nilai]`");
+        if (variableName.toLowerCase() === "bolehsay") {
+             const boolValue = (valueName.toLowerCase() == "false" || valueName.toLowerCase() == "mati" || valueName.toLowerCase() == "off") ? false : (valueName.toLowerCase() == "true" || valueName.toLowerCase() === "hidup" || valueName.toLowerCase() == "on") ? true : undefined;
+             if (boolValue === undefined) return message.channel.send("Input nilai yang salah! (" + valueName + ")");
+             bolehSay = boolValue;
+             return message.channel.send(`Member sekarang ${boolValue === true ? "dapat menggunakan `say`" : "tidak dapat menggunakan `say`"} command!`);
+        }
     }
 });
 
@@ -222,7 +256,7 @@ client.on("guildMemberRemove", member => {
         const memberTag = `${member.user.username}#${member.user.discriminator}`
         const welcomeTeks = new discord.MessageEmbed()
             .setTitle(`[-] ${memberTag} telah meninggalkan ${member.guild.name}`)
-            .setDescription(`Selamat tinggal **${memberTag}**, kami sekarang berjumlah **${member.guild.memberCount}** member di Discord Server ini, berharap dapat melihat anda kembali!`)
+            .setDescription(`Selamat tinggal **${memberTag}**, server kami sekarang berjumlah **${member.guild.memberCount}** member di Discord Server ini, berharap dapat melihat anda kembali!`)
             .setTimestamp()
             .setColor('GRAY');
 
