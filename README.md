@@ -15,7 +15,9 @@ b-say [kalimat]
 b-sayembed [kalimat]
 b-totalmember
 ```
-#### Dapat request new command klo mau bayar sedikit lah :v
+#### latest change-logs
+> - Bug fix bypass spam
+> - command untuk mengatur command yang dapat dipakai member
 
 ### Dokumentasi masih belum selesai, contact developer untuk informasi selengkapnya. 
 <br>
