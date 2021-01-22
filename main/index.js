@@ -16,12 +16,10 @@ let botStatus = `Join Server KitaKan Bar-Bar: ${serverBarBarLink}`; //pesan yang
 
 const menyakinkan = [];
 const gaboleh = [
-    ".-.",
-    ",-,",
-    ".-,",
-    ",-."
+    ".-."
 ]
 let bolehSay = true
+let bolehbypass = true  // "true" maka member dapat bypass, "false" member tidak dapat bypass
 const helpDesc = `Prefix: **${prefix}**\n\n**Commands**\n${prefix}help\n${prefix}teswelcome\n${prefix}tesbye\n${prefix}prefix ${"`[prefix baru]`"}\n${prefix}say ${"`[Teks]`"}\n${prefix}eval ${"`[skrip]`"}\n${prefix}sayembed ${"`[Teks]`"}\n${prefix}totalmember\n${prefix}infoserver\n${prefix}atur ${"`[variabel]`"} ${"`[nilai]`"}`
 const helpDesc2 = `Prefix terkini: **${prefix}**\n\n**Commands**\n${prefix}help\n${prefix}teswelcome\n${prefix}tesbye\n${prefix}prefix ${"`[prefix baru]`"}\n${prefix}say ${"`[Teks]`"}\n${prefix}eval ${"`[skrip]`"}\n${prefix}sayembed ${"`[Teks]`"}\n${prefix}totalmember\n${prefix}infoserver\n${prefix}atur ${"`[variabel]`"} ${"`[nilai]`"}`
 
@@ -41,7 +39,7 @@ function memberCount() {
 function contains(target, pattern){
     var value = 0;
     pattern.forEach(function(word){
-      value = value + target.includes(word);
+      value = value + target.toLowerCase().includes(word.toLowerCase());
     });
     return (value === 1)
 }
@@ -76,14 +74,12 @@ client.on("message", async message => {
     const guild = message.guild;
     const pengirim = message.author;
     const mentahMSG = message.content.slice().toLowerCase()
-    if (mentahMSG.includes("bypas") && !OwnerId.includes(pengirim.id) && message.author.bot === false) {
-        return message.channel.send("Bypass ?! <@" + pengirim.id + ">");
-    } else if (contains(mentahMSG, gaboleh) && !OwnerId.includes(pengirim.id)) {
+    if (contains(mentahMSG, gaboleh) && !OwnerId.includes(pengirim.id) && (bolehbypass === false)) {
         const emoji = "❌"
         message.react(emoji).then(r=> {
-             message.channel.send("Ga jelas lu anjir <@" + pengirim.id + ">").then(msg => {
+             /*message.channel.send("Ga jelas lu anjir <@" + pengirim.id + ">").then(msg => {
                   msg.delete({timeout: 4000}).catch(console.error);
-             })
+             })*/
              message.delete({timeout: 3000}).catch(console.error);
         })
         return;
@@ -226,8 +222,13 @@ client.on("message", async message => {
              if (boolValue === undefined) return message.channel.send("Input nilai yang salah! (" + valueName + ")");
              bolehSay = boolValue;
              return message.channel.send(`Member sekarang ${boolValue === true ? "dapat menggunakan `say`" : "tidak dapat menggunakan `say`"} command!`);
+        } else if (variableName.toLowerCase() === "bolehbypas") {
+              const boolValue = (valueName.toLowerCase() == "false" || valueName.toLowerCase() == "mati" || valueName.toLowerCase() == "off") ? false : (valueName.toLowerCase() == "true" || valueName.toLowerCase() === "hidup" || valueName.toLowerCase() == "on") ? true : undefined;
+             if (boolValue === undefined) return message.channel.send("Input nilai yang salah! (" + valueName + ")");
+             bolehbypass = boolValue;
+             return message.channel.send(`Member sekarang ${boolValue === true ? "dapat bypass" : "tidak dapat bypass"}`);
         }
-    }
+    } 
 });
 
 client.on("guildMemberAdd", member => {
