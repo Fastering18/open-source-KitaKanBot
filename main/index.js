@@ -1,5 +1,6 @@
 /*
-Baris ke 33 - 34 untuk konfigurasi.
+/*  Fastering18
+/*  31/03/2021
 */
 
 const discord = require("discord.js"); //Package utama yang diperlukan untuk membuat bot dengan JavaScript
@@ -7,7 +8,9 @@ const discord = require("discord.js"); //Package utama yang diperlukan untuk mem
 const dotconfig = require("dotenv").config();
 
 const botToken = process.env.BotToken; //Bot token harus dirahasiakan
-const client = new discord.Client();
+const client = new discord.Client({
+  ws: { properties: { $browser: "Discord iOS" } } // Untuk display presence di mobile iOS
+});
 const OwnerId = ["646346146553397258", "775363892167573535", "754325405346955295"]; //untuk menentukan pemilik berdasarkan User id (Discord)
 
 let prefix = "b-" //ganti prefix sesuai keinginan anda
@@ -38,8 +41,8 @@ const gaboleh = [
 ==================================================================================SETTINGS=======================================================================================================================================*/
 
 
-const helpDesc = `Prefix: **${prefix}**\n\n**Commands**\n${prefix}help\n${prefix}teswelcome\n${prefix}tesbye\n${prefix}prefix ${"`[prefix baru]`"}\n${prefix}say ${"`[Teks]`"}\n${prefix}eval ${"`[skrip]`"}\n${prefix}sayembed ${"`[Teks]`"}\n${prefix}totalmember\n${prefix}infoserver\n${prefix}atur ${"`[variabel]`"} ${"`[nilai]`"}`
-const helpDesc2 = `Prefix terkini: **${prefix}**\n\n**Commands**\n${prefix}help\n${prefix}teswelcome\n${prefix}tesbye\n${prefix}prefix ${"`[prefix baru]`"}\n${prefix}say ${"`[Teks]`"}\n${prefix}eval ${"`[skrip]`"}\n${prefix}sayembed ${"`[Teks]`"}\n${prefix}totalmember\n${prefix}infoserver\n${prefix}atur ${"`[variabel]`"} ${"`[nilai]`"}`
+const helpDesc = `Prefix: **${prefix2}**\n\n**Commands**\n${prefix2}help\n${prefix2}teswelcome\n${prefix2}tesbye\n${prefix2}prefix ${"`[prefix baru]`"}\n${prefix2}say ${"`[Teks]`"}\n${prefix2}eval ${"`[skrip]`"}\n${prefix2}sayembed ${"`[Teks]`"}\n${prefix2}totalmember\n${prefix2}infoserver\n${prefix2}atur ${"`[variabel]`"} ${"`[nilai]`"}`;
+const helpDesc2 = `Prefix terkini: **${prefix2}**\n\n**Commands**\n${prefix2}help\n${prefix2}teswelcome\n${prefix2}tesbye\n${prefix2}prefix ${"`[prefix baru]`"}\n${prefix2}say ${"`[Teks]`"}\n${prefix2}eval ${"`[skrip]`"}\n${prefix2}sayembed ${"`[Teks]`"}\n${prefix2}totalmember\n${prefix2}infoserver\n${prefix2}atur ${"`[variabel]`"} ${"`[nilai]`"}`;
 
 function memberCount() {
     const guildsArray = client.guilds.cache
@@ -72,15 +75,6 @@ function clean(text) {
 client.on("ready", () => {
     console.log(`${client.user.username} telah aktif, id: ${client.user.id}`);
     client.user.setPresence({ activity: { name: botStatus }, status: "online" });
-
-    /*setInterval(() => {
-        countserver = memberCount()
-        if (countserver !== 0 && countserver !== "") {
-            botStatus += `\n${countserver} Members`
-            client.user.setPresence({ activity: { name: botStatus }, status: "online" });
-        }
-    }, 60000);
-    */
 });
 /*
 Saat bot aktif, akan muncul pemberitahuan di output
@@ -231,22 +225,62 @@ client.on("message", async message => {
             .setColor('GREEN');
         return message.channel.send(embed);
     } else if (command === "set" || command === "atur" || command === "setting") {
-        if (!OwnerId.includes(message.author.id)) return message.channel.send(`${"`" + command + "`"} command hanya untuk owner!`);
-        const variableName = args[0];
-        const valueName = args[1];
-        if (!variableName || !valueName) return message.channel.send("Harap menggunakan format: " + prefix + "set `[opsi]` `[nilai]`");
-        if (variableName.toLowerCase() === "bolehsay") {
-             const boolValue = (valueName.toLowerCase() == "false" || valueName.toLowerCase() == "mati" || valueName.toLowerCase() == "off") ? false : (valueName.toLowerCase() == "true" || valueName.toLowerCase() === "hidup" || valueName.toLowerCase() == "on") ? true : undefined;
-             if (boolValue === undefined) return message.channel.send("Input nilai yang salah! (" + valueName + ")");
-             bolehSay = boolValue;
-             return message.channel.send(`Member sekarang ${boolValue === true ? "dapat menggunakan `say`" : "tidak dapat menggunakan `say`"} command!`);
-        } else if (variableName.toLowerCase() === "bolehbypas") {
-              const boolValue = (valueName.toLowerCase() == "false" || valueName.toLowerCase() == "mati" || valueName.toLowerCase() == "off") ? false : (valueName.toLowerCase() == "true" || valueName.toLowerCase() === "hidup" || valueName.toLowerCase() == "on") ? true : undefined;
-             if (boolValue === undefined) return message.channel.send("Input nilai yang salah! (" + valueName + ")");
-             bolehbypass = boolValue;
-             return message.channel.send(`Member sekarang ${boolValue === true ? "dapat bypass" : "tidak dapat bypass"}`);
-        }
-    } 
+    if (!OwnerId2.includes(message.author.id))
+      return message.channel.send(
+        `${"`" + command + "`"} command hanya untuk owner!`
+      );
+    const variableName = args[0];
+    const valueName = args[1];
+    if (!variableName || !valueName)
+      return message.channel.send(
+        "Harap menggunakan format: " + prefix + "set `[opsi]` `[nilai]`"
+      );
+    if (variableName.toLowerCase() === "bolehsay") {
+      const boolValue =
+        valueName.toLowerCase() == "false" ||
+        valueName.toLowerCase() == "mati" ||
+        valueName.toLowerCase() == "off"
+          ? false
+          : valueName.toLowerCase() == "true" ||
+            valueName.toLowerCase() === "hidup" ||
+            valueName.toLowerCase() == "on"
+          ? true
+          : undefined;
+      if (boolValue === undefined)
+        return message.channel.send(
+          "Input nilai yang salah! (" + valueName + ")"
+        );
+      bolehSay = boolValue;
+      return message.channel.send(
+        `Member sekarang ${
+          boolValue === true
+            ? "dapat menggunakan `say`"
+            : "tidak dapat menggunakan `say`"
+        } command!`
+      );
+    } else if (variableName.toLowerCase() === "bolehbypas") {
+      const boolValue =
+        valueName.toLowerCase() == "false" ||
+        valueName.toLowerCase() == "mati" ||
+        valueName.toLowerCase() == "off"
+          ? false
+          : valueName.toLowerCase() == "true" ||
+            valueName.toLowerCase() === "hidup" ||
+            valueName.toLowerCase() == "on"
+          ? true
+          : undefined;
+      if (boolValue === undefined)
+        return message.channel.send(
+          "Input nilai yang salah! (" + valueName + ")"
+        );
+      bolehbypass = boolValue;
+      return message.channel.send(
+        `Member sekarang ${
+          boolValue === true ? "dapat bypass" : "tidak dapat bypass"
+        }`
+      );
+    }
+  } 
 });
 
 client.on("guildMemberAdd", member => {
