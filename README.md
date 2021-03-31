@@ -14,11 +14,11 @@ b-tesbye
 b-say [kalimat]
 b-sayembed [kalimat]
 b-totalmember
+b-setting [variabel] [nilai]
 ```
 #### latest change-logs
-> - Bug fix bypass spam
 > - command untuk mengatur command yang dapat dipakai member
 
 ### Dokumentasi masih belum selesai, contact developer untuk informasi selengkapnya. 
-<br>
+<br>  
 ## Dilisensikan ke MIT, 2021 Fastering18
