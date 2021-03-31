@@ -21,4 +21,5 @@ b-setting [variabel] [nilai]
 
 ### Dokumentasi masih belum selesai, contact developer untuk informasi selengkapnya. 
 <br>  
-## Dilisensikan ke MIT, 2021 Fastering18
+
+Dilisensikan ke MIT, 2021 [Fastering18](https://github.com/Fastering18)
